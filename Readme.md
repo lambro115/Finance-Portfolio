@@ -4,7 +4,7 @@ This repository contains financial data analysis projects focusing on **investme
 
 # Projects
 
-# 1. Investment Growth Analysis
+### 1. Investment Growth Analysis
 **Objective:** Analyze long-term investment growth and market performance.  
 **Methods Used:**
 - Computed cumulative returns, holding period returns (HPR), and annualized returns over 50 years.
