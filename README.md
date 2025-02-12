@@ -1,41 +1,48 @@
 # Finance-Portfolio
-#### **Finance-Portfolio** 
-*A collection of financial data analysis and investment research projects using Python.*
 
+Here is a clean, structured **README.md** file that you can copy and paste directly into your GitHub repository:
 
-## **Projects & Descriptions**  
+```md
+# Finance-Portfolio
 
-### ** Portfolio Optimization**   
-*Objective:* Construct an optimal portfolio using **Modern Portfolio Theory (MPT)** to maximize returns while minimizing risk.  
- *Methods Used:*
-- **Mean-Variance Optimization:** Determines optimal asset weights for portfolio diversification.
-- **Sharpe Ratio Maximization:** Identifies the best risk-adjusted portfolio allocation.
-- **Efficient Frontier Plotting:** Visualizes the trade-off between risk and return.  
-   *Technologies:* Python, Pandas, NumPy, SciPy, Matplotlib
+This repository contains financial data analysis projects focusing on **investment growth analysis, portfolio optimization, and stock performance evaluation**. Each project applies key financial and statistical techniques to analyze market data, optimize investments, and assess stock performance.
 
- **File:** [`portfolio_optimization.py`](portfolio_optimization.py)  
+## Projects
 
-### **2️ Stock Performance Analysis**  
- *Objective:* Evaluate the relationship between **individual stock returns and market performance** using statistical methods.  
- *Methods Used:*
-- **Correlation Analysis:** Measures how stock returns (e.g., WMT, AMZN) are related to the overall market.
-- **OLS Regression:** Estimates stock beta (β) and market dependence.
-- **Historical Data Analysis:** Examines stock performance over time.  
- *Technologies:* Python, Pandas, Statsmodels, SciPy  
+### 1. Investment Growth Analysis
+**Objective:** Analyze long-term investment growth and market performance.  
+**Methods Used:**
+- Computed cumulative returns, holding period returns (HPR), and annualized returns over 50 years.
+- Evaluated historical stock index performance and investment growth trends.
+- Visualized the impact of market fluctuations on long-term investment strategies.
 
-🔗 **File:** [`stock_performance_analysis.py`](stock_performance_analysis.py)  
+**File:** `Investment Growth Analysis.py`
 
-### ** Impact of Recession on Stock Market**   
- *Objective:* Analyze how stock market returns fluctuate during **recessionary vs. non-recessionary periods**.  
- *Methods Used:*
-- **Merging Macroeconomic Indicators with Market Data:** Uses recession indicators (FRED data) with market returns.
-- **Hypothesis Testing (T-Test):** Determines if market returns significantly decline during recessions.
-- **Data Cleaning & Time-Series Analysis:** Processes long-term financial data.  
-   *Technologies:* Python, Pandas, Statsmodels, SciPy  
+---
 
- **File:** [`recession_stock_analysis.py`](recession_stock_analysis.py)  
+### 2. Portfolio Optimization
+**Objective:** Construct an optimal investment portfolio using Modern Portfolio Theory (MPT).  
+**Methods Used:**
+- Mean-variance optimization to determine efficient asset allocation.
+- Sharpe ratio maximization to identify the best risk-adjusted portfolio.
+- Efficient frontier plotting to analyze risk-return trade-offs.
 
-## **How to Use This Repository**   
+**File:** `Portfolio Optimization.py`
+
+---
+
+### 3. Stock Performance Analysis
+**Objective:** Assess the relationship between individual stock returns and market indices.  
+**Methods Used:**
+- Correlation analysis to evaluate stock and market return dependencies.
+- OLS regression models to estimate stock beta and sensitivity to market fluctuations.
+- Historical performance evaluation for specific stocks.
+
+**File:** `Stock Performance Analysis.py`
+
+---
+
+## How to Use
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/Finance-portfolio.git
@@ -44,10 +51,17 @@
    ```bash
    pip install pandas numpy scipy statsmodels matplotlib
    ```
-3. Run individual scripts to explore financial insights.
+3. Run individual scripts to analyze financial data and generate insights.
+
+---
+
+## Author
+**Socrates Lambros**  
+Finance & Data Analytics Enthusiast  
+[LinkedIn](https://www.linkedin.com/in/socrates-lambros-0491b11bb/)
+```
+
+This **README.md** is **clean, professional, and easy to navigate**. Let me know if you need any modifications!
 
 
-## **Author**  
- **Socrates Lambros**  
- Finance & Data Analytics Enthusiast  
- [LinkedIn](https://www.linkedin.com/in/socrates-lambros-0491b11bb/)  
+   
