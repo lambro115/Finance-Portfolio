@@ -1,1 +1,34 @@
+import pandas as pd
+import statsmodels.api as sm
+from scipy.stats import pearsonr 
+
+stock = pd.read_excel(FILE LOCATION\individual_stocks.xlsx', sheet_name='Sheet1')
+print(stock)
+
+stock['date'] = pd.to_datetime(stock['date']) 
+stock['ret'] = pd.to_numeric(stock['ret'], errors='coerce')
+stock['vwretd'] = pd.to_numeric(stock['vwretd'], errors='coerce')
+
+stock_2000 = stock[stock['date'].dt.year >= 2000]
+
+wmt_ret = stock_2000[stock_2000['ticker'] == 'WMT']['ret']
+vwretd_ret = stock_2000[stock_2000['ticker'] == 'WMT']['vwretd']
+
+print(wmt_ret.head())
+print(vwretd_ret.head())
+
+correlation = wmt_ret.corr(vwretd_ret)
+print(f"Correlation between Walmart and Market Returns: {correlation}")
+
+X = sm.add_constant(vwretd_ret)  
+y = wmt_ret
+model = sm.OLS(y, X).fit()  
+print(model.summary())
+
+amzn_data = stock_2000[stock_2000['ticker'] == 'AMZN']
+
+X = sm.add_constant(amzn_data['vwretd'])
+y = amzn_data['ret']
+amzn_model = sm.OLS(y, X).fit()
+print(amzn_model.summary())
 
