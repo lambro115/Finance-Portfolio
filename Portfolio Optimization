@@ -1,1 +1,81 @@
+# Import Modules
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.optimize as sco
+
+index = pd.read_excel(FILE LOCATION\index_192601_202212.xlsx', sheet_name='data', parse_dates=['date'])
+
+index = index[index['date'] >= '2013-01-01']
+
+assets = ['vwretd', 'ewretd']  # Example indices (replace with specific stocks if available)
+returns = index[assets].dropna()
+
+mean_returns = returns.mean() * 252  # Annualized Returns
+cov_matrix = returns.cov() * 252  # Annualized Covariance
+
+def portfolio_performance(weights, mean_returns, cov_matrix):
+    """Calculates expected portfolio return and volatility."""
+    returns = np.dot(weights, mean_returns)
+    volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+    return returns, volatility
+
+def neg_sharpe_ratio(weights, mean_returns, cov_matrix, risk_free_rate=0.02):
+    """Objective function to minimize (negative Sharpe ratio)."""
+    returns, volatility = portfolio_performance(weights, mean_returns, cov_matrix)
+    return -(returns - risk_free_rate) / volatility  # Maximizing Sharpe Ratio
+
+def minimize_volatility(weights, mean_returns, cov_matrix):
+    """Objective function to minimize volatility."""
+    return portfolio_performance(weights, mean_returns, cov_matrix)[1]
+
+num_assets = len(assets)
+bounds = tuple((0, 1) for _ in range(num_assets))  # Each weight between 0% and 100%
+constraints = ({'type': 'eq', 'fun': lambda x: np.sum(x) - 1})  # Sum of weights = 100%
+
+initial_guess = num_assets * [1. / num_assets]  # Equal allocation to start
+opt_sharpe = sco.minimize(neg_sharpe_ratio, initial_guess, args=(mean_returns, cov_matrix), method='SLSQP', bounds=bounds, constraints=constraints)
+
+opt_min_vol = sco.minimize(minimize_volatility, initial_guess, args=(mean_returns, cov_matrix), method='SLSQP', bounds=bounds, constraints=constraints)
+
+sharpe_weights = opt_sharpe.x
+min_vol_weights = opt_min_vol.x
+
+risk_range = np.linspace(0.1, 0.3, 50)  # Define volatility range
+efficient_portfolios = []
+
+for target_risk in risk_range:
+    constraints_eff = [
+        {'type': 'eq', 'fun': lambda x: portfolio_performance(x, mean_returns, cov_matrix)[1] - target_risk},
+        {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+    ]
+    result = sco.minimize(lambda x: -portfolio_performance(x, mean_returns, cov_matrix)[0], initial_guess, method='SLSQP', bounds=bounds, constraints=constraints_eff)
+    efficient_portfolios.append(result.x)
+
+# Convert Efficient Portfolio Results to DataFrame
+efficient_frontier = pd.DataFrame(efficient_portfolios, columns=assets)
+
+# Portfolio Performance Output
+sharpe_return, sharpe_volatility = portfolio_performance(sharpe_weights, mean_returns, cov_matrix)
+min_vol_return, min_volatility = portfolio_performance(min_vol_weights, mean_returns, cov_matrix)
+
+print("Maximum Sharpe Ratio Portfolio Weights:", sharpe_weights)
+print("Return:", sharpe_return, "Volatility:", sharpe_volatility)
+
+print("\nMinimum Volatility Portfolio Weights:", min_vol_weights)
+print("Return:", min_vol_return, "Volatility:", min_volatility)
+
+# Plot Efficient Frontier
+plt.figure(figsize=(10, 6))
+plt.scatter(risk_range, [portfolio_performance(w, mean_returns, cov_matrix)[0] for w in efficient_portfolios], c=risk_range, cmap='coolwarm', label="Efficient Frontier")
+plt.scatter(sharpe_volatility, sharpe_return, marker='*', color='gold', s=200, label="Max Sharpe Ratio Portfolio")
+plt.scatter(min_volatility, min_vol_return, marker='o', color='black', s=100, label="Minimum Volatility Portfolio")
+
+plt.xlabel('Portfolio Volatility (Risk)')
+plt.ylabel('Expected Return')
+plt.title('Efficient Frontier and Optimal Portfolios')
+plt.legend()
+plt.colorbar(label='Risk Level')
+plt.show()
 
