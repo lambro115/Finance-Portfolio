@@ -1,1 +1,74 @@
+# Import Modules
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt # Import Data
+index = pd.read_excel(r'C:\Users\lambr\Downloads\index_192601_202212.xlsx', sheet_name='data')
+print(index)
+
+famafrench = pd.read_excel(FILE LOCATION\famafrench_192607_202311.xlsx', sheet_name='data')
+print(famafrench)
+
+home = pd.read_excel(FILE LOCATION\homeprice_198701_202310.xlsx', sheet_name='data')
+print(home) # Compute percentage changes in (returns of) home index values
+
+home = home.sort_values(by='date', ascending=True)
+#print(home)
+
+home['lagcsushpinsa']=home['csushpinsa'].shift(12)
+print(home)
+
+home['homeret'] = home['csushpinsa']/home['lagcsushpinsa'] - 1
+print(home)
+ # Merge the datasets
+
+index['datemerge']=index['date'].dt.year*100+index['date'].dt.month
+print(index)
+
+famafrench['datemerge']=famafrench['date'].dt.year*100+famafrench['date'].dt.month
+print(famafrench)
+
+home['datemerge']=home['date'].dt.year*100+home['date'].dt.month
+print(home)
+
+merged = pd.merge(index, famafrench, on='datemerge')
+merged = pd.merge(merged, home, on='datemerge')
+
+merged=merged.dropna()
+
+print(merged) # Detailed summary statistics
+
+merged.agg({'vwretd': ['count','mean','std'], 
+    'vwretx': ['count','mean','std'],
+    'ewretd': ['count','mean','std'], 
+    'ewretx': ['count','mean','std'],
+    'rf': ['count','mean','std'],
+    'homeret': ['count','mean','std']})  # How much would $1 invested in these indexes grow to?
+merged['onedollargrowsto_vwretd'] = (1 + pd.Series(merged.vwretd)).cumprod()
+merged['onedollargrowsto_vwretx'] = (1 + pd.Series(merged.vwretx)).cumprod()
+merged['onedollargrowsto_ewretd'] = (1 + pd.Series(merged.ewretd)).cumprod()
+merged['onedollargrowsto_ewretx'] = (1 + pd.Series(merged.ewretx)).cumprod()
+merged['onedollargrowsto_rf'] = (1 + pd.Series(merged.rf)).cumprod()
+merged['onedollargrowsto_homeret'] = (1 + pd.Series(merged.homeret)).cumprod()
+
+print(merged) # Line graph
+
+merged.plot(x='date', y=['onedollargrowsto_vwretx', 'onedollargrowsto_rf', 'onedollargrowsto_homeret' ], marker='', color='blue', label=['vwretx', 'rf', 'homeret'], kind='line') # Compute AHPR (annualized holding period return) 
+hpr_vwretd = merged['onedollargrowsto_vwretd'].iloc[-1]-1
+hpr_ewretd = merged['onedollargrowsto_ewretd'].iloc[-1]-1
+hpr_vwretx = merged['onedollargrowsto_vwretx'].iloc[-1]-1
+hpr_ewretx = merged['onedollargrowsto_ewretx'].iloc[-1]-1
+hpr_rf = merged['onedollargrowsto_rf'].iloc[-1]-1
+hpr_homeret = merged['onedollargrowsto_homeret'].iloc[-1]-1
+
+ahpr_vwretd = (1+hpr_vwretd)**(1/(431/12))-1
+ahpr_vwretx = (1+hpr_vwretx)**(1/(431/12))-1
+ahpr_ewretd = (1+hpr_ewretd)**(1/(431/12))-1
+ahpr_ewretx = (1+hpr_ewretx)**(1/(431/12))-1
+ahpr_rf = (1+hpr_rf)**(1/(431/12))-1
+ahpr_homeret = (1+hpr_homeret)**(1/(431/12))-1
+
+print(ahpr_vwretd * 100, ahpr_vwretx * 100, ahpr_ewretd * 100, ahpr_ewretx * 100, ahpr_rf * 100, ahpr_homeret * 100) --- what about this as well 
+ 
+
 
