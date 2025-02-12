@@ -1,8 +1,5 @@
 # Finance-Portfolio
 
-
-# Finance-Portfolio
-
 This repository contains financial data analysis projects focusing on **investment growth analysis, portfolio optimization, and stock performance evaluation**. Each project applies key financial and statistical techniques to analyze market data, optimize investments, and assess stock performance.
 
 # Projects
